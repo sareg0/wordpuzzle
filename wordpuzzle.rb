@@ -1,54 +1,83 @@
-require 'rspec'
+# require 'rspec'
 
-RSpec.describe do
+# RSpec.describe do
 
-  it 'finds all anagrams of a word' do
-    expect(anagram_finder(['o','g','d'])).to contain_exactly('god', 'dog')
-  end
+#   it 'finds all anagrams of a word' do
+#     expect(anagram_finder(['o','g','d'])).to contain_exactly('god', 'dog')
+#   end
 
-  it 'finds all anagrams for two letter words' do
-    expect(anagram_finder(['i','t'])).to contain_exactly('it', 'ti')
-  end
+#   it 'finds all anagrams for two letter words' do
+#     expect(anagram_finder(['i','t'])).to contain_exactly('it', 'ti')
+#   end
 
-  it 'combine known letters with additional letter' do
-    expect(word_maker('i')).to include(["i", "b"], ["i", "c"], ["i", "d"])
-  end
+#   it 'combine known letters with additional letter' do
+#     expect(word_maker('i')).to include(["i", "b"], ["i", "c"], ["i", "d"])
+#   end
 
-  it 'finds all anagrams from results of word_maker' do
-    word_combis = []
-    word_maker('i').each do |a|
-      word_combis = word_combis.push(anagram_finder(a))
-    end
-    expect(word_combis.flatten).to include('in', 'it', 'hi')
-  end
+#   word_combis = []
 
-end
+#   it 'finds all anagrams from results of word_maker' do
+#     word_maker('i').each do |a|
+#       word_combis = word_combis.push(anagram_finder(a))
+#     end
+#     expect(word_combis.flatten).to include('in', 'it', 'hi')
+#   end
+
+#   it 'finds all three letter words and compares to the two letter words'
+#     anagram_finder(word)
+#   end
+
+# end
 
 ## puzzle start
 
-WORDS = File.readlines('/usr/share/dict/words').map { |w| w.chomp }
+## take all words with letter 'i'
+
+WORDS = File.readlines('/usr/share/dict/words').map { |w| w.downcase.chomp }
+FILTERED_WORDS = WORDS.select { |word| word.size <= 9 && word.include?('i') }
 ALPHABET = ('a'..'z').to_a
 puts WORDS.length
 
-def anagram_finder(letters)
-  filtered_words = WORDS.select { |w| letters.size == w.chomp.size }
-  letters.each do |l|
-    filtered_words = filtered_words.select { |w| w.include?(l) }
-  end
-  return filtered_words
-  puts filtered_words
+two_letter_words = FILTERED_WORDS.select { |word| word.size == 2 }
+characters = ['i']
+two_letter_words.select do |word|
+  letter_array = word.split("")
+  characters << letter_array
+  characters = characters.flatten.uniq
 end
 
-def word_maker(letters)
-  letter_combinations = []
-  ALPHABET.each do |a|
-    letter_combinations.push([letters.to_s, a.to_s])
-  end
-  return letter_combinations
-end
+print characters
+puts
+puts two_letter_words.length
 
-combinations = word_maker('i')
-anagram_finder(combinations)
+# def anagram_finder(letters)
+#   filtered_words = WORDS.select { |w| letters.size == w.chomp.size }
+#   letters.each do |l|
+#     filtered_words = filtered_words.select { |w| w.include?(l) }
+#   end
+#   return filtered_words
+#   puts filtered_words
+# end
+
+# def word_maker(letters)
+#   letter_combinations = []
+#   ALPHABET.each do |a|
+#     letter_combinations.push([letters.to_s, a.to_s])
+#   end
+#   return letter_combinations
+#   puts letter_combinations
+# end
+
+# word_combis = []
+# word_maker('i').each do |a|
+#   word_combis = word_combis.push(anagram_finder(a))
+# end
+
+# puts word_combis
+
+# wörter mit 3 buchstaben
+
+
 
 # RETURNS ALL ANAGRAMS
 # def anagram_finder(letters)
